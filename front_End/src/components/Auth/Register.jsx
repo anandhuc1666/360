@@ -1,6 +1,8 @@
 import { useState } from "react";
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 function Register() {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     name: "",
     number: "",
@@ -15,9 +17,14 @@ function Register() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
- 
+ try {
+  await axios.post(`${import.meta.env.VITE_API_URL}/api/user/register`,formData)
+  navigate("/")
+ } catch (error) {
+   alert(error.response?.data?.message || "register failed");
+ }
   };
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#0e0e0e] [#393939] to-[#14763A]">
