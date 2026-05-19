@@ -2,30 +2,40 @@ import { useState } from "react";
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
 function Login() {
-  const navigate = useNavigate()
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+const navigate = useNavigate();
+
+const [formData, setFormData] = useState({
+  email: "",
+  password: "",
+});
+
+const [rememberMe, setRememberMe] = useState(false);
+
+const handleChange = (e) => {
+  setFormData({
+    ...formData,
+    [e.target.name]: e.target.value,
   });
-  const [rememberMe, setRememberMe] = useState(false);
+};
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.name]: e.target.value,
-    });
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response= await axios.post(`${import.meta.env.VITE_API_URL}/api/user/login`,rememberMe)
-      navigate("/demo", { state: response.data.user });
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/user/login`,
+      {
+        ...formData,
+        rememberMe,
+      }
+    );
 
-    } catch (error) {
-      alert( error.response?.data?.message || "Login failed")
-    }
-  };
+    navigate("/demo", { state: response.data.user });
+
+  } catch (error) {
+    alert(error.response?.data?.message || "Login failed");
+  }
+};
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-600 via-indigo-500 to-purple-600">
       {/* Animated background elements */}
